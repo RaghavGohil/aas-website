@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Audio File</title>
+</head>
+
+<body>
+    <h2>Upload Audio File</h2>
+    <form id="uploadForm" method="POST" enctype="multipart/form-data">
+        <label for="audio">Choose an audio file:</label>
+        <input type="file" id="audio" name="audio" accept="audio/*" required>
+        <br><br>
+        <button type="button" id="sbutton">Submit</button>
+    </form>
+
+    <script>
+        // Start the test and get session ID
+        async function startTest() {
+            console.log('starting test')
+            let startTestUrl = 'http://localhost:5000/api/start_test';
+            try {
+                let response = await fetch(startTestUrl, {
+                    method: 'POST',
+                    credentials: 'include',
+                    referrerPolicy: 'no-referrer'
+                });
+                let data = await response.json();
+                console.log(data); // print response
+            } catch (error) {
+                console.error('Error starting test:', error);
+            }
+        }
+
+        // Submit test with form data and audio file
+        async function submitTest(formData) {
+            console.log('initiating test submit')
+            let itemId = prompt("Enter Item ID:"); // Ask user for the item ID
+            if (!itemId) {
+                return;
+            }
+
+            let testUrl = `http://localhost:5000/api/test/item/${itemId}`;
+
+            console.log(testUrl)
+
+            try {
+                let response = await fetch(testUrl, {
+                    method: 'POST',
+                    body: formData,
+                    credentials:'include'
+                });
+                let data = await response.json();
+                console.log('Response:', data);
+            } catch (error) {
+                console.error('Error submitting test:', error);
+            }
+            console.log('test submitted')
+        }
+
+        //start the test
+
+        // Handle form submission
+        document.getElementById('sbutton').addEventListener('click', async function (event) {
+            event.preventDefault()
+            console.log('initializing form data')
+            let formData = new FormData(document.getElementById('uploadForm'));
+            console.log(formData.get('audio'))
+            await submitTest(formData); // Submit the form with the session ID automatically handled by Flask
+            console.log('ovari desu')
+        });
+
+    </script>
+</body>
+
+</html>
