@@ -47,39 +47,30 @@ def start_test():
     )
     return response
 
-@app.route('/api/test/item/<int:item_id>', methods=['GET', 'POST'])
-def test_item(item_id):
+@app.route('/api/upload-audio/<int:item_id>', methods=['POST'])
+def upload_audio(item_id):
     client_session_id = None
     try:
         client_session_id = session['sid']
     except:
         return {'error': 'Invalid session ID. Session not created.'}, 400  # bad request
-    
-    if request.method == 'GET':
-        return {
-            'item': {
-                'word': test_data[item_id]['word'],
-                'image': test_data[item_id]['image']
-            }
-        }, 200
 
-    elif request.method == 'POST':  # put the audio file for the session
-        word = test_data[item_id]['word']
-        audio_file_name = f'audio_{word}.mp3'
-        audio_file = request.files['audio']
-        if not audio_file:
-            return jsonify({'error': 'No audio file uploaded'}), 400
-        audio_file_path = f'uploads/{client_session_id}'
-        if not os.path.exists(audio_file_path):
-            os.makedirs(audio_file_path)
-        audio_file.save(os.path.join(audio_file_path, audio_file_name))
-        session['user_audio_files'][client_session_id] = {
-            'word': word,
-            'audio_file': os.path.join(audio_file_path, audio_file_name)
-        }
-        print("Session contents before request:", dict(session))
-        return {'message': 'Audio uploaded successfully to the server!',
-                        'session_id': client_session_id, 'item_id': item_id}, 201
+    word = test_data[item_id]['word']
+    audio_file_name = f'audio_{word}.mp3'
+    audio_file = request.files['audio']
+    if not audio_file:
+        return jsonify({'error': 'No audio file uploaded'}), 400
+    audio_file_path = f'uploads/{client_session_id}'
+    if not os.path.exists(audio_file_path):
+        os.makedirs(audio_file_path)
+    audio_file.save(os.path.join(audio_file_path, audio_file_name))
+    session['user_audio_files'][client_session_id] = {
+        'word': word,
+        'audio_file': os.path.join(audio_file_path, audio_file_name)
+    }
+    print("Session contents before request:", dict(session))
+    return {'message': 'Audio uploaded successfully to the server!',
+                    'session_id': client_session_id, 'item_id': item_id}, 201
 
 
 @app.route('/api/test/submit', methods=['POST'])
