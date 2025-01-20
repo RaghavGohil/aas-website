@@ -1,6 +1,6 @@
 import './index.css'
 import { useEffect, useState } from 'react'
-import TestItem from './components/TestItem'
+import TestCarousel from './components/TestCarousel'
 import Result from './components/Results'
 import ProgressBar from './components/ProgressBar'
 import Welcome from './components/Welcome'
@@ -79,7 +79,7 @@ export default function App() {
       <div className="mb-4 text-center">
         <span className="font-semibold">Word {currentTestItemIndex + 1} of {testData.length}</span>
       </div>
-      <TestItem
+      <TestCarousel
         testItem={testData[currentTestItemIndex]}
         onNext={handleNext}
         onPrev={handlePrev}

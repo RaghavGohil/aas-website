@@ -30,13 +30,13 @@ export default function TestItem({ testItem , onNext, onPrev }) {
         <>
           <button
             onClick={onNext}
-            className="w-full px-4 py-2 bg-green-500 text-white font-bold rounded-lg hover:bg-green-600 transition-all"
+            className="w-full px-4 py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition-all"
           >
             Next Word
           </button>
           <button
             onClick={onPrev}
-            className="w-full px-4 py-2 bg-slate-500 text-white font-bold rounded-lg hover:bg-slate-600 transition-all"
+            className="w-full px-4 py-2 bg-slate-500 text-white font-semibold rounded-lg hover:bg-slate-600 transition-all"
           >
             Prev Word
           </button>
