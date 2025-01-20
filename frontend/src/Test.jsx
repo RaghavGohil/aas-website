@@ -10,12 +10,18 @@ export default function Test() {
 
   const [showWelcome, setShowWelcome] = useState(true)
   const [isComplete, setIsComplete] = useState(false)
-  const {currentTestItemIndex, testData} = useContext(TestContext)
+  const {currentTestItemIndex,testData} = useContext(TestContext)
 
   // start the test
   const startTest = async () => {
     try{
-      let res = await axios.post(import.meta.env.VITE_BACKEND_URL+'/api/start-test')
+      let res = await axios.post(
+        import.meta.env.VITE_BACKEND_URL+'/api/start-test',
+        {},
+        {
+          withCredentials: true
+        }
+      )
       console.log('Test has been started successfully!!!', res.data)
       setShowWelcome(false)
     }catch(err){

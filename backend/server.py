@@ -49,6 +49,7 @@ def start_test():
 
 @app.route('/api/upload-audio/<int:item_id>', methods=['POST'])
 def upload_audio(item_id):
+    print(session.values())
     client_session_id = None
     try:
         client_session_id = session['sid']
@@ -56,10 +57,14 @@ def upload_audio(item_id):
         return {'error': 'Invalid session ID. Session not created.'}, 400  # bad request
 
     word = test_data[item_id]['word']
-    audio_file_name = f'audio_{word}.mp3'
-    audio_file = request.files['audio']
-    if not audio_file:
-        return jsonify({'error': 'No audio file uploaded'}), 400
+    audio_file_name = f'audio_{word}.wav'
+
+    audio_file = None
+    try:
+        audio_file = request.files['audio']
+    except:
+        return jsonify({'error': 'Could not retrieve audio file.'}), 404
+
     audio_file_path = f'uploads/{client_session_id}'
     if not os.path.exists(audio_file_path):
         os.makedirs(audio_file_path)

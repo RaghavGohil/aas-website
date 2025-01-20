@@ -12,10 +12,10 @@ export default function AudioRecorder() {
   const sendAudioData = async (formData) => {
     try{
       const res = await axios.post(
-        import.meta.env.VITE_BACKEND_URL+`/api/upload-audio/${currentTestItemIndex+1}`,
+        import.meta.env.VITE_BACKEND_URL+`/api/upload-audio/${currentTestItemIndex}`,
         formData,
         {
-          crossDomain: true,
+          withCredentials: true
         }
       )
     }catch(err){
