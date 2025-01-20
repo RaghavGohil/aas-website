@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Check, X, FileDown, RotateCcw } from 'lucide-react';
 
-export default function ResultScreen({ results, words, onRestart }) {
+export default function Result({ results, words, onRestart }) {
   const [pdfUrl, setPdfUrl] = useState(null);
 
   const correctWords = words.filter(word => results[word.word]);

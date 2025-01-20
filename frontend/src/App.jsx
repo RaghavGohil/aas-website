@@ -1,20 +1,20 @@
 import './index.css'
 import { useEffect, useState } from 'react'
 import TestItem from './components/TestItem'
-import ResultScreen from './components/Results'
+import Result from './components/Results'
 import ProgressBar from './components/ProgressBar'
-import WelcomeScreen from './components/Welcome'
+import Welcome from './components/Welcome'
 import axios from 'axios'
 
 axios.defaults.headers.post['credentials'] = 'include'
 
 export default function App() {
 
-  const [currentIndex, setCurrentIndex] = useState(0)
-  //const [results, setResults] = useState({})
-  const [isComplete, setIsComplete] = useState(false)
   const [showWelcome, setShowWelcome] = useState(true)
+  const [currentTestItemIndex, setCurrentTestItemIndex] = useState(0)
+  const [isComplete, setIsComplete] = useState(false)
   const [testData, setTestData] = useState([])
+  //const [results, setResults] = useState({})
 
   useEffect(()=>{
     async function fetchTestData(){
@@ -40,23 +40,30 @@ export default function App() {
   }
 
   // handle the word
-  const handleNext = (word,isCorrect) => {
-    if (currentIndex < words.length - 1) {
-      setCurrentIndex(prev => prev + 1)
+  const handleNext = () => {
+    if (currentTestItemIndex < testData.length - 1) {
+      setCurrentTestItemIndex(prev => prev + 1)
     } else {
       setIsComplete(true)
     }
   }
 
+  // handle the word
+  const handlePrev = () => {
+    if (currentTestItemIndex > 0) {
+      setCurrentTestItemIndex(prev => prev - 1)
+    }
+  }
+
   const handleRestart = () => {
-    setCurrentIndex(0)
+    setCurrentTestItemIndex(0)
     //setResults({})
     setIsComplete(false)
     setShowWelcome(true)
   }
 
   if (showWelcome) {
-    return <WelcomeScreen onStart={startTest}/>
+    return <Welcome onStart={startTest}/>
   }
 
   if (isComplete) {
@@ -66,15 +73,16 @@ export default function App() {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-4 text-center">Speech Misarticulation Detection</h1>
+      <h1 className="text-3xl font-bold mb-4 text-center">Auto Articulation Screening</h1>
       
       {/* <ProgressBar current={currentIndex + 1} total={words.length} /> */}
       <div className="mb-4 text-center">
-        <span className="font-semibold">Word {currentIndex + 1} of {words.length}</span>
+        <span className="font-semibold">Word {currentTestItemIndex + 1} of {testData.length}</span>
       </div>
       <TestItem
-        word={words[currentIndex]}
+        testItem={testData[currentTestItemIndex]}
         onNext={handleNext}
+        onPrev={handlePrev}
       />
       <div className="mt-8 text-center text-sm text-gray-500">
         <p>Click "Start Recording" to begin, then "Next Word" when you're ready to continue.</p>

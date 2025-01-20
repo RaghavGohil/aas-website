@@ -25,9 +25,9 @@ app.config['SESSION_COOKIE_SAMESITE'] = 'None' # this was so hard to configure :
 Session(app)
 
 test_data = None
-with open('test_data.json') as f:
+with open('test_data.json', encoding='utf8') as f:
     test_data = json.load(f)
-test_data = {item['id']: {'word': item['word'], 'image': item['image']} for item in test_data}
+test_data = [{'word': item['word'], 'image': item['image'], 'ipa': item['ipa']} for item in test_data]
 
 @app.route('/api/test-data', methods=['GET'])
 def get_test_data():

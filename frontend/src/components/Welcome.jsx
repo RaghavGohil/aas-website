@@ -1,9 +1,9 @@
-export default function WelcomeScreen({ onStart }) {
+export default function Welcome({ onStart }) {
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md">
         <div className="mb-6">
-          <h1 className="text-3xl text-center font-bold">Welcome to Speech Misarticulation Detection</h1>
+          <h1 className="text-3xl text-center font-bold">Welcome to Auto Articulation Screener Test</h1>
         </div>
         <div className="space-y-6">
           <p className="text-center text-lg">
