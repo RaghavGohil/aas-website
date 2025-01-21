@@ -24,7 +24,7 @@ export default function AudioRecorder() {
     }
   }
 
-  const { status, startRecording, stopRecording, mediaBlobUrl, mediaBlob, clearBlobUrl} =
+  const { status, startRecording, stopRecording} =
     useReactMediaRecorder({ 
       audio: true, 
       onStop: (blobUrl, blob)=>{ // on stop gets the blobUrl and the blob itself
@@ -35,7 +35,10 @@ export default function AudioRecorder() {
         formData.append("audio", audioFile);
         sendAudioData(formData); // send the formData to server
 
-        setBlobUrls(prev => [...prev, blobUrl]) // on stop, also set the pointers 
+        setBlobUrls(prev => ({
+          ...prev, // Copy previous state
+          [currentTestItemIndex]: blobUrl, // Update the specific index
+        }));
       },
   });
 
