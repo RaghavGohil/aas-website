@@ -2,20 +2,17 @@ import { useContext, useEffect, useState } from 'react'
 import TestCarousel from './components/TestCarousel'
 import Result from './components/Results'
 import ProgressBar from './components/ProgressBar'
-import Welcome from './components/Welcome'
+import Welcome from './Welcome'
 import { TestContext } from './TestContext'
+import { Navigate } from 'react-router-dom'
 
 export default function Test() {
 
-  const {currentTestItemIndex,testData,startTest,showWelcome,isComplete} = useContext(TestContext)
+  const {currentTestItemIndex,testData} = useContext(TestContext)
 
-  if (showWelcome) {
-    return <Welcome onStart={startTest}/>
-  }
-
-  if (isComplete) {
-    return <>Results screen should be here!</>
-    //return <ResultScreen results={results} words={words} onRestart={handleRestart} />
+  if(testData.length === 0) 
+  {
+    return <Navigate to='/' /> // no test data, return to welcome
   }
 
   return (

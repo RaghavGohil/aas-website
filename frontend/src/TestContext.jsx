@@ -5,35 +5,46 @@ export const TestContext = createContext()
 
 export const TestProvider = ({ children }) => {
 
+  const [hasStartedTest, setHasStartedTest] = useState(false)
+  const [hasCompletedTest, setHasCompletedTest] = useState(false)
   const [currentTestItemIndex, setCurrentTestItemIndex] = useState(0)
   const [testData, setTestData] = useState([])
   //const [results, setResults] = useState({})
-  const [showWelcome, setShowWelcome] = useState(true)
   const [blobUrls, setBlobUrls] = useState({}) // sets the blob urls which point to the memory
-  const [isComplete, setIsComplete] = useState(false)
 
   const handleRestart = () => {
     //setResults({})
-    setIsComplete(false)
-    setShowWelcome(true)
+    setHasCompletedTest(false)
   }
 
   // start the test
   const startTest = async () => {
     try{
       let res = await axios.post(
-        import.meta.env.VITE_BACKEND_URL+'/api/start-test',
+        import.meta.env.VITE_BACKEND_URL+'/api/test/start',
         {},
         {
           withCredentials: true
         }
       )
       console.log('Test has been started successfully!!!', res.data)
-      setShowWelcome(false)
+      setHasStartedTest(true)
     }catch(err){
       console.log('Test could not be started.', err) 
     }
   }
+
+  useEffect(()=>{
+    async function fetchTestData(){
+      try{
+        let res = await axios.get(import.meta.env.VITE_BACKEND_URL+'/api/test/data')
+        setTestData(res.data) // contains the word, ipa and the image.
+      }catch(err){
+        console.log('Could not get the test data from the server.', err)
+      }  
+    }
+    fetchTestData()
+  },[])
 
   const submitTest = async () => {
 
@@ -46,32 +57,19 @@ export const TestProvider = ({ children }) => {
     if(!alertConfirm) return
 
    
-    let res = axios.post(
-      import.meta.env.VITE_BACKEND_URL+'/api/submit-test',
+    let res = await axios.post(
+      import.meta.env.VITE_BACKEND_URL+'/api/test/submit',
       {},
       {
         withCredentials: true
       }
     )    
-
-    console.log(res)
-
+    console.log(res.data)
+    //setIsComplete(true)
   }
 
-  useEffect(()=>{
-    async function fetchTestData(){
-      try{
-        let res = await axios.get(import.meta.env.VITE_BACKEND_URL+'/api/test-data')
-        setTestData(res.data) // contains the word, ipa and the image.
-      }catch(err){
-        console.log('Could not get the test data from the server.', err)
-      }  
-    }
-    fetchTestData()
-  },[])
-
   return (
-      <TestContext.Provider value={{currentTestItemIndex, setCurrentTestItemIndex, testData, blobUrls, setBlobUrls, startTest, showWelcome, isComplete, submitTest}}>
+      <TestContext.Provider value={{currentTestItemIndex, setCurrentTestItemIndex, testData, blobUrls, setBlobUrls, startTest, hasCompletedTest, submitTest, hasStartedTest}}>
           {children}
       </TestContext.Provider>
   )

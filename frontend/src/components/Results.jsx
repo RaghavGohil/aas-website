@@ -1,19 +1,31 @@
-import { useState } from 'react';
-import { Check, X, FileDown, RotateCcw } from 'lucide-react';
+import { useState, useContext, useEffect } from 'react'
+import { Check, X, FileDown, RotateCcw } from 'lucide-react'
+import { TestContext } from '../TestContext'
+import { useNavigate } from 'react-router-dom'
 
-export default function Result({ results, words, onRestart }) {
-  const [pdfUrl, setPdfUrl] = useState(null);
+export default function Result() {
+  
+  const [pdfUrl, setPdfUrl] = useState(null)
+  const {testData} = useContext(TestContext)
+  const navigate = useNavigate()
 
-  const correctWords = words.filter(word => results[word.word]);
-  const incorrectWords = words.filter(word => !results[word.word]);
-  const accuracy = (correctWords.length / words.length) * 100;
+  //useEffect(()=>{
+  //  if(testData.length === 0)
+  //  {
+  //    navigate('/')
+  //  }
+  //},[])
+
+  //const correctWords = words.filter(testData => results[word.word])
+  //const incorrectWords = words.filter(word => !results[word.word])
+  const accuracy = 100
 
   const generatePDF = () => {
     // Simulate PDF generation
     setTimeout(() => {
-      setPdfUrl('/sample.pdf');
-    }, 2000);
-  };
+      setPdfUrl('/sample.pdf')
+    }, 2000)
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -22,7 +34,7 @@ export default function Result({ results, words, onRestart }) {
 
       <div className="mb-8 p-6 border border-gray-200 rounded-lg shadow-md">
         <p className="text-4xl font-bold mb-4 text-center">Accuracy: {accuracy.toFixed(2)}%</p>
-        <p className="text-center mb-4">You correctly pronounced {correctWords.length} out of {words.length} words.</p>
+        <p className="text-center mb-4">You correctly pronounced 20 out of 26 words.</p>
 
         <div className="flex flex-wrap justify-center gap-4">
           <button
@@ -42,7 +54,6 @@ export default function Result({ results, words, onRestart }) {
           )}
 
           <button
-            onClick={onRestart}
             className="border border-blue-600 text-blue-600 px-4 py-2 rounded-lg"
           >
             <RotateCcw className="mr-2 h-4 w-4" /> Start New Assessment
@@ -57,12 +68,12 @@ export default function Result({ results, words, onRestart }) {
             <span className="text-xl font-bold">Well Pronounced</span>
           </div>
           <ul>
-            {correctWords.map(word => (
+            {/* {correctWords.map(word => (
               <li key={word.word} className="mb-2 flex items-center">
                 <Check className="mr-2 h-4 w-4 text-green-500" />
                 {word.word} <span className="text-gray-500 ml-2">({word.ipa})</span>
               </li>
-            ))}
+            ))} */}
           </ul>
         </div>
 
@@ -72,15 +83,15 @@ export default function Result({ results, words, onRestart }) {
             <span className="text-xl font-bold">Needs Practice</span>
           </div>
           <ul>
-            {incorrectWords.map(word => (
+            {/* {incorrectWords.map(word => (
               <li key={word.word} className="mb-2 flex items-center">
                 <X className="mr-2 h-4 w-4 text-red-500" />
                 {word.word} <span className="text-gray-500 ml-2">({word.ipa})</span>
               </li>
-            ))}
+            ))} */}
           </ul>
         </div>
       </div>
     </div>
-  );
+  )
 }

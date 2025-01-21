@@ -1,4 +1,12 @@
-export default function Welcome({ onStart }) {
+import { useContext } from "react";
+import { TestContext } from "./TestContext";
+import { useNavigate } from "react-router-dom";
+
+export default function Welcome() {
+
+  const {startTest} = useContext(TestContext)
+  const navigate = useNavigate() 
+
   return (
     <div className="container mx-auto px-4 py-8">
       <div className="max-w-2xl mx-auto bg-white p-6 rounded-lg shadow-md">
@@ -28,7 +36,11 @@ export default function Welcome({ onStart }) {
             </ul>
           </div>
           <button
-            onClick={onStart}
+            onClick={async ()=>{
+                await startTest()
+                navigate('/test/user-information')
+              }
+            }
             className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-600"
           >
             Start Assessment

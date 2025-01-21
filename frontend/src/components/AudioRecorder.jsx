@@ -11,7 +11,7 @@ export default function AudioRecorder() {
   const sendAudioData = async (formData) => { // send the audio data to the server for processing
     try{
       await axios.post(
-        import.meta.env.VITE_BACKEND_URL+`/api/upload-audio/${currentTestItemIndex}`,
+        import.meta.env.VITE_BACKEND_URL+`/api/test/upload-audio/${currentTestItemIndex}`,
         formData,
         {
           withCredentials: true // include session cookie

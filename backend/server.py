@@ -29,12 +29,12 @@ with open('test_data.json', encoding='utf8') as f:
     test_data = json.load(f)
 test_data = [{'word': item['word'], 'image': item['image'], 'ipa': item['ipa']} for item in test_data]
 
-@app.route('/api/test-data', methods=['GET'])
+@app.route('/api/test/data', methods=['GET'])
 def get_test_data():
     response = test_data
     return response
 
-@app.route('/api/start-test', methods=['POST'])
+@app.route('/api/test/start', methods=['POST'])
 def start_test():
     sid = str(uuid.uuid4())  # Create a new session ID
     session['sid'] = sid # Save it in the session
@@ -47,14 +47,31 @@ def start_test():
     )
     return response
 
-@app.route('/api/upload-audio/<int:item_id>', methods=['POST'])
-def upload_audio(item_id):
-    print(session.values())
+@app.route('/api/test/user-information', methods=['POST'])
+def user_information():
+
     client_session_id = None
     try:
         client_session_id = session['sid']
     except:
-        return {'error': 'Invalid session ID. Session not created.'}, 400  # bad request
+        return {'message': 'Invalid session ID. Session not created.'}, 400  # bad request
+
+    try:
+        session['age'] = request.json['age']
+        session['location'] = request.json['location']
+    except:
+        return {'message': 'Error setting personal information in server session.'}, 400  # bad request
+        
+    return { 'message': 'Server has recieved your personal information.', }, 200
+
+@app.route('/api/test/upload-audio/<int:item_id>', methods=['POST'])
+def upload_audio(item_id):
+
+    client_session_id = None
+    try:
+        client_session_id = session['sid']
+    except:
+        return {'message': 'Invalid session ID. Session not created.'}, 400  # bad request
 
     word = test_data[item_id]['word']
     audio_file_name = f'audio_{word}.wav'
@@ -63,7 +80,7 @@ def upload_audio(item_id):
     try:
         audio_file = request.files['audio']
     except:
-        return jsonify({'error': 'Could not retrieve audio file.'}), 404
+        return jsonify({'message': 'Could not retrieve audio file.'}), 404
 
     audio_file_path = f'uploads/{client_session_id}'
     if not os.path.exists(audio_file_path):
@@ -79,22 +96,15 @@ def upload_audio(item_id):
 
 
 @app.route('/api/test/submit', methods=['POST'])
-def submit():
-    client_session_id = session.get('session_id')
+def submit_test():
 
-    if not client_session_id:
-        return {'error': 'Invalid session ID. Session not created.'}, 400  # bad request
+    client_session_id = None
+    try:
+        client_session_id = session['sid']
+    except:
+        return {'message': 'Invalid session ID. Session not created.'}, 400  # bad request
 
-    if len(session['user_audio_files']) < len(test_data):
-        return jsonify({'error': 'Not all test items completed'}), 400
-
-    # TODO: Process the audio files using ML model
-    processed_results = {'status': 'Processed successfully'}
-
-    # TODO: Generate a PDF with the results
-    pdf_path = 'results/test_results.pdf'
-
-    return send_file(pdf_path, as_attachment=True)
+    return {'message': f'message from the server!{client_session_id}'}
 
 
 if __name__ == '__main__':

@@ -1,10 +1,12 @@
-import { useState, useContext } from 'react'
+import { useEffect, useState, useContext } from 'react'
 import AudioRecorder from './AudioRecorder'
 import { TestContext } from '../TestContext'
+import { useNavigate } from 'react-router-dom';
 
 export default function TestItem() {
 
   const {currentTestItemIndex, setCurrentTestItemIndex, testData, submitTest} = useContext(TestContext);
+  const navigate = useNavigate()
 
   // handle the word
   const handleNext = () => {
@@ -21,6 +23,11 @@ export default function TestItem() {
     }
   }
 
+  const handleSubmit = async() => {
+    await submitTest()
+    navigate('/test/results') 
+  }
+
   return (
     <div className="max-w-md mx-auto bg-white shadow-lg rounded-lg p-6">
       <div className="flex flex-col items-center mb-6">
@@ -32,7 +39,7 @@ export default function TestItem() {
         <AudioRecorder/>
         <>
           <button
-            onClick={(currentTestItemIndex + 1) === testData.length ? submitTest : handleNext /*Change to submit if last item*/ }
+            onClick={(currentTestItemIndex + 1) === testData.length ? handleSubmit : handleNext /*Change to submit if last item*/ }
             className="w-full px-4 py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition-all"
           >
             {(currentTestItemIndex + 1) === testData.length ? 'Submit' : 'Next Word' /*Change to submit if last item*/ }
