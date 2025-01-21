@@ -3,37 +3,11 @@ import TestCarousel from './components/TestCarousel'
 import Result from './components/Results'
 import ProgressBar from './components/ProgressBar'
 import Welcome from './components/Welcome'
-import axios from 'axios'
 import { TestContext } from './TestContext'
 
 export default function Test() {
 
-  const [showWelcome, setShowWelcome] = useState(true)
-  const [isComplete, setIsComplete] = useState(false)
-  const {currentTestItemIndex,testData} = useContext(TestContext)
-
-  // start the test
-  const startTest = async () => {
-    try{
-      let res = await axios.post(
-        import.meta.env.VITE_BACKEND_URL+'/api/start-test',
-        {},
-        {
-          withCredentials: true
-        }
-      )
-      console.log('Test has been started successfully!!!', res.data)
-      setShowWelcome(false)
-    }catch(err){
-      console.log('Test could not be started.', err) 
-    }
-  }
-
-  const handleRestart = () => {
-    //setResults({})
-    setIsComplete(false)
-    setShowWelcome(true)
-  }
+  const {currentTestItemIndex,testData,startTest,showWelcome,isComplete} = useContext(TestContext)
 
   if (showWelcome) {
     return <Welcome onStart={startTest}/>

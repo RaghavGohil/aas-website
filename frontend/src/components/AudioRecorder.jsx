@@ -6,8 +6,7 @@ import axios from 'axios'
 export default function AudioRecorder() {
 
   const [recording, setRecording] = useState(false) // sets if you are recording or not
-  const [blobUrls, setBlobUrls] = useState([]) // sets the blob urls which point to the memory
-  const {currentTestItemIndex} = useContext(TestContext) // the test context stores all the important test data
+  const {currentTestItemIndex, setBlobUrls, blobUrls} = useContext(TestContext) // the test context stores all the important test data
 
   const sendAudioData = async (formData) => { // send the audio data to the server for processing
     try{

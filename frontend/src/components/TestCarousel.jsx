@@ -4,7 +4,7 @@ import { TestContext } from '../TestContext'
 
 export default function TestItem() {
 
-  const {currentTestItemIndex, setCurrentTestItemIndex, testData} = useContext(TestContext);
+  const {currentTestItemIndex, setCurrentTestItemIndex, testData, submitTest} = useContext(TestContext);
 
   // handle the word
   const handleNext = () => {
@@ -32,14 +32,15 @@ export default function TestItem() {
         <AudioRecorder/>
         <>
           <button
-            onClick={handleNext}
+            onClick={(currentTestItemIndex + 1) === testData.length ? submitTest : handleNext /*Change to submit if last item*/ }
             className="w-full px-4 py-2 bg-green-500 text-white font-semibold rounded-lg hover:bg-green-600 transition-all"
           >
-            Next Word
+            {(currentTestItemIndex + 1) === testData.length ? 'Submit' : 'Next Word' /*Change to submit if last item*/ }
           </button>
           <button
             onClick={handlePrev}
-            className="w-full px-4 py-2 bg-slate-500 text-white font-semibold rounded-lg hover:bg-slate-600 transition-all"
+            disabled={currentTestItemIndex < 1 /*Change to disabled if first item*/}
+            className="w-full px-4 py-2 bg-slate-500 text-white font-semibold rounded-lg hover:bg-slate-600 disabled:bg-slate-300 transition-all"
           >
             Prev Word
           </button>
