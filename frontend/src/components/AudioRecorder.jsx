@@ -6,7 +6,6 @@ import axios from 'axios'
 export default function AudioRecorder() {
 
   const [recording, setRecording] = useState(false) // sets if you are recording or not
-  const [hasRecordedOnce, setHasRecordedOnce] = useState(false) // sets if you have recorded once, if yes then retake shows
   const [blobUrls, setBlobUrls] = useState([]) // sets the blob urls which point to the memory
   const {currentTestItemIndex} = useContext(TestContext) // the test context stores all the important test data
 
@@ -45,7 +44,6 @@ export default function AudioRecorder() {
   useEffect(()=>{ // cleanup & reset
     // as the current test item changes, we have to reset the audio recorder.
     setRecording(false)
-    setHasRecordedOnce(false)
   },[currentTestItemIndex]) // as currentTestItemIndex changes, (test progresses) the recording state should reset
 
   return (
@@ -58,12 +56,11 @@ export default function AudioRecorder() {
               <button
                onClick={()=>{
                 startRecording()
-                setHasRecordedOnce(true)
                 setRecording(true)
                }}
                className="w-full px-4 py-2 bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600 transition-all"
               >
-               {hasRecordedOnce ? 'Retake Audio' : 'Start Recording' /* if recorded once show retake audio */}
+               {blobUrls[currentTestItemIndex] ? 'Retake Audio' : 'Start Recording' /* if blob is there, it means it was recorded */}
               </button>   
             ):( // when recording, show option to stop
               <button
