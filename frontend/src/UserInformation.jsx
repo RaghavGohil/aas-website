@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { TestContext } from './TestContext'
 
 export default function UserInformation(){
   const [age, setAge] = useState('')
@@ -7,6 +8,7 @@ export default function UserInformation(){
   const [submitted, setSubmitted] = useState(false)
 
   const navigate = useNavigate()
+  const {submitUserInformation} = useContext(TestContext)
 
   // Dropdown options for age and location
   const ageOptions = [
@@ -24,14 +26,13 @@ export default function UserInformation(){
     { label: 'Maharashtra', value: 'Maharashtra' },
   ]
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
-    
     // Simulate the form submission (e.g., sending data to an API)
-    console.log('Form submitted:', { age, location })
-
-    setSubmitted(true) // Mark as submitted
-    navigate('/test/attempt')
+    await submitUserInformation({ age, location },()=>{
+      setSubmitted(true) // Mark as submitted
+      navigate('/test/attempt')
+    })
   }
 
   return (

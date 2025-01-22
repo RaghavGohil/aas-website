@@ -1,5 +1,6 @@
 import { createContext, useState, useEffect } from 'react'
 import axios from 'axios'
+import { handleError, handleSuccess } from './Utility'
 
 export const TestContext = createContext()
 
@@ -18,8 +19,9 @@ export const TestProvider = ({ children }) => {
   }
 
   // start the test
-  const startTest = async () => {
-    try{
+  const startTest = async (callback) => {
+
+    try{ // create the test session
       let res = await axios.post(
         import.meta.env.VITE_BACKEND_URL+'/api/test/start',
         {},
@@ -27,26 +29,36 @@ export const TestProvider = ({ children }) => {
           withCredentials: true
         }
       )
-      console.log('Test has been started successfully!!!', res.data)
+      setTestData(res.data.test_data) // contains the word, ipa and the image.
       setHasStartedTest(true)
+      handleSuccess('Test has been started successfully!')
+      callback()
     }catch(err){
-      console.log('Test could not be started.', err) 
+      handleError(err)
     }
   }
 
-  useEffect(()=>{
-    async function fetchTestData(){
-      try{
-        let res = await axios.get(import.meta.env.VITE_BACKEND_URL+'/api/test/data')
-        setTestData(res.data) // contains the word, ipa and the image.
-      }catch(err){
-        console.log('Could not get the test data from the server.', err)
-      }  
+  const submitUserInformation = async (userInformation, callback)  => {
+    try{
+      let res = await axios.post(
+        import.meta.env.VITE_BACKEND_URL+'/api/test/user-information',
+        {
+          'age':userInformation.age,
+          'location':userInformation.location
+        },
+        {
+          withCredentials: true
+        }
+      )
+      handleSuccess('User information was submitted!')
+      setHasStartedTest(true)
+      callback()
+    }catch(err){
+      handleError(err)
     }
-    fetchTestData()
-  },[])
+  }
 
-  const submitTest = async () => {
+  const submitTest = async (callback) => {
 
     if(Object.keys(blobUrls).length !== testData.length){ // all test items should be filled 
       alert('Please record in all the test items.')
@@ -56,21 +68,27 @@ export const TestProvider = ({ children }) => {
     let alertConfirm = confirm('Do you want to submit this test?') // confirm submit
     if(!alertConfirm) return
 
-   
-    let res = await axios.post(
-      import.meta.env.VITE_BACKEND_URL+'/api/test/submit',
-      {},
-      {
-        withCredentials: true
-      }
-    )    
-    console.log(res.data)
+    try{
+      let res = await axios.post(
+        import.meta.env.VITE_BACKEND_URL+'/api/test/submit',
+        {},
+        {
+          withCredentials: true
+        }
+      )    
+      handleSuccess('Test was submitted!', res.data)
+      callback()
+    }catch(err){
+      console.log(err)
+      handleError(err)
+    }
+    
     //setIsComplete(true)
   }
 
   return (
-      <TestContext.Provider value={{currentTestItemIndex, setCurrentTestItemIndex, testData, blobUrls, setBlobUrls, startTest, hasCompletedTest, submitTest, hasStartedTest}}>
-          {children}
+      <TestContext.Provider value={{currentTestItemIndex, setCurrentTestItemIndex, testData, blobUrls, setBlobUrls, startTest, hasCompletedTest, submitTest, submitUserInformation, hasStartedTest}}>
+        {children}
       </TestContext.Provider>
   )
 }

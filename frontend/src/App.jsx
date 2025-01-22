@@ -5,18 +5,22 @@ import Results from './components/Results'
 import UserInformation from './UserInformation'
 import { TestProvider } from "./TestContext";
 import {BrowserRouter, Routes, Route} from 'react-router-dom'
+import { ToastContainer } from 'react-toastify';
 
 export default function App(){
     return(
-        <TestProvider>
-            <BrowserRouter>
-                <Routes>
-                    <Route path='/' element={<Welcome/>} />    
-                    <Route path='/test/user-information' element={<UserInformation/>}/>
-                    <Route path='/test/attempt' element={<Test/>}/>
-                    <Route path='/test/results' element={<Results/>}/>
-                </Routes> 
-            </BrowserRouter>
-        </TestProvider>
+        <>
+            <ToastContainer/>
+            <TestProvider>
+                <BrowserRouter>
+                    <Routes>
+                        <Route path='/' element={<Welcome/>} />    
+                        <Route path='/test/user-information' element={<UserInformation/>}/>
+                        <Route path='/test/attempt' element={<Test/>}/>
+                        <Route path='/test/results' element={<Results/>}/>
+                    </Routes> 
+                </BrowserRouter>
+            </TestProvider>
+        </>
     )
 }

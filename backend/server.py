@@ -29,11 +29,6 @@ with open('test_data.json', encoding='utf8') as f:
     test_data = json.load(f)
 test_data = [{'word': item['word'], 'image': item['image'], 'ipa': item['ipa']} for item in test_data]
 
-@app.route('/api/test/data', methods=['GET'])
-def get_test_data():
-    response = test_data
-    return response
-
 @app.route('/api/test/start', methods=['POST'])
 def start_test():
     sid = str(uuid.uuid4())  # Create a new session ID
@@ -43,6 +38,7 @@ def start_test():
         {
             'message': f"Test has been started with session id: {sid}.",
             'session_id': sid,
+            'test_data': test_data,
         }
     )
     return response
@@ -58,7 +54,8 @@ def user_information():
 
     try:
         session['age'] = request.json['age']
-        session['location'] = request.json['location']
+        session['location'] = request.json['location'] # store the user information in the session
+
     except:
         return {'message': 'Error setting personal information in server session.'}, 400  # bad request
         
