@@ -1,5 +1,5 @@
 import './index.css'
-import Test from './Test'
+import TestCarousel from './TestCarousel'
 import Welcome from './Welcome';
 import Results from './components/Results'
 import UserInformation from './UserInformation'
@@ -16,7 +16,7 @@ export default function App(){
                     <Routes>
                         <Route path='/' element={<Welcome/>} />    
                         <Route path='/test/user-information' element={<UserInformation/>}/>
-                        <Route path='/test/attempt' element={<Test/>}/>
+                        <Route path='/test/attempt' element={<TestCarousel/>}/>
                         <Route path='/test/results' element={<Results/>}/>
                     </Routes> 
                 </BrowserRouter>

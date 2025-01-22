@@ -38,10 +38,20 @@ def start_test():
         {
             'message': f"Test has been started with session id: {sid}.",
             'session_id': sid,
-            'test_data': test_data,
         }
     )
     return response
+
+@app.route('/api/test/data', methods=['GET'])
+def get_test_data(): # also requires a valid session
+    client_session_id = None
+    try:
+        client_session_id = session['sid']
+    except:
+        return {'message': 'Invalid session ID. Session not created.'}, 400  # bad request
+    response = test_data
+    return response
+
 
 @app.route('/api/test/user-information', methods=['POST'])
 def user_information():

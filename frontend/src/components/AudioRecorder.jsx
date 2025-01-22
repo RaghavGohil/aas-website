@@ -2,6 +2,7 @@ import { useEffect, useState, useContext } from "react"
 import { useReactMediaRecorder } from "react-media-recorder"
 import { TestContext } from "../TestContext"
 import axios from 'axios'
+import { handleError } from "../Utility"
 
 export default function AudioRecorder() {
 
@@ -18,7 +19,7 @@ export default function AudioRecorder() {
         }
       )
     }catch(err){
-      console.log('Unable to send audio data to server.', err)
+      handleError(err)
     }
   }
 

@@ -5,16 +5,13 @@ import { useNavigate } from 'react-router-dom';
 
 export default function TestItem() {
 
-  const {currentTestItemIndex, setCurrentTestItemIndex, testData, submitTest} = useContext(TestContext);
+  const {testData, currentTestItemIndex, setCurrentTestItemIndex, submitTest} = useContext(TestContext);
   const navigate = useNavigate()
 
   // handle the word
   const handleNext = () => {
-    if (currentTestItemIndex < testData.length - 1) {
+    if (currentTestItemIndex < testData.length - 1)
       setCurrentTestItemIndex(prev => prev + 1)
-    } else {
-      setIsComplete(true)
-    }
   }
 
   const handlePrev = () => {
@@ -37,7 +34,7 @@ export default function TestItem() {
         <p className="text-xl text-gray-600 mb-4">{testData[currentTestItemIndex]?.ipa}</p>
       </div>
       <div className="flex flex-col items-center gap-4">
-        <AudioRecorder/>
+        <AudioRecorder currentTestItemIndex={currentTestItemIndex}/>
         <>
           <button
             onClick={(currentTestItemIndex + 1) === testData?.length ? handleSubmit : handleNext /*Change to submit if last item*/ }

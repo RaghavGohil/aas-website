@@ -9,7 +9,7 @@ export const TestProvider = ({ children }) => {
   const [hasStartedTest, setHasStartedTest] = useState(false)
   const [hasCompletedTest, setHasCompletedTest] = useState(false)
   const [currentTestItemIndex, setCurrentTestItemIndex] = useState(0)
-  const [testData, setTestData] = useState([])
+  const [testData, setTestData] = useState({})
   //const [results, setResults] = useState({})
   const [blobUrls, setBlobUrls] = useState({}) // sets the blob urls which point to the memory
 
@@ -20,8 +20,7 @@ export const TestProvider = ({ children }) => {
 
   // start the test
   const startTest = async (callback) => {
-
-    try{ // create the test session
+    try{
       let res = await axios.post(
         import.meta.env.VITE_BACKEND_URL+'/api/test/start',
         {},
@@ -29,9 +28,8 @@ export const TestProvider = ({ children }) => {
           withCredentials: true
         }
       )
-      setTestData(res.data.test_data) // contains the word, ipa and the image.
-      setHasStartedTest(true)
       handleSuccess('Test has been started successfully!')
+      setHasStartedTest(true)
       callback()
     }catch(err){
       handleError(err)
@@ -87,7 +85,7 @@ export const TestProvider = ({ children }) => {
   }
 
   return (
-      <TestContext.Provider value={{currentTestItemIndex, setCurrentTestItemIndex, testData, blobUrls, setBlobUrls, startTest, hasCompletedTest, submitTest, submitUserInformation, hasStartedTest}}>
+      <TestContext.Provider value={{testData, setTestData, currentTestItemIndex, setCurrentTestItemIndex, blobUrls, setBlobUrls, startTest, hasCompletedTest, submitTest, submitUserInformation, hasStartedTest}}>
         {children}
       </TestContext.Provider>
   )

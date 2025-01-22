@@ -43,7 +43,7 @@ export default function UserInformation(){
         </div>
         <div className="space-y-6">
           <p className="text-center text-lg">
-            Please fill out the form to submit your age group and location.
+            Please fill out the form. The test will start as soon as you click submit.
           </p>
           <form onSubmit={handleSubmit}>
             <div className="space-y-4">
